@@ -46,6 +46,8 @@ nav {
 
 .nav-item {
     margin: 0 25px 0 0;
+    color:white;
+    text-transform: uppercase;
 }
 
 .page-top img{

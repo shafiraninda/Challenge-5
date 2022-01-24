@@ -5,17 +5,30 @@ const isLoggedIn = (req, res, next) => {
     if(token){
         jwt.verify(token, 'secret', (err, decodedToken) => {
             if(err){
-                res.locals.user=null
-                //res.redirect('/login')
-            } else{
-                res.locals.user = decodedToken.username
-                console.log(decodedToken)
+                res.locals.greeting=null;
+                res.render('main', {
+                    pageTitle: "Main Page",
+                    cssStyle:null,
+                    visibility:"visible",
+                })
+            }
+            else{
+                res.locals.greeting=decodedToken.username;
+                res.render('main', {
+                    pageTitle: "Main Page",
+                    cssStyle:null,
+                    visibility:"invisible",
+                })
                 next()
             }
         })
     } else {
-        res.locals.user=null
-       // res.redirect('/login')
+        res.locals.greeting=null,
+        res.render('main', {
+            pageTitle: "Main Page",
+            cssStyle:null,
+            visibility:"visible",
+        })
     }
 }
 

@@ -15,11 +15,8 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 
-app.get('/', (req,res)=>{
-    res.render('main', {
-        pageTitle: "Main Page",
-        cssStyle:null
-    })
+app.get('/', isLoggedIn, (req,res)=>{
+    
 })
 
 app.get('/signup', (req,res)=>{
@@ -55,32 +52,34 @@ app.get('/login', (req,res)=>{
     })
 })
 
-
-
 app.post('/login', (req,res)=>{
     const { username , password }=req.body
-    console.log(password)
     const data = JSON.parse(fs.readFileSync('./data/data.json','utf-8'))
     const userMatch = data.find((item)=> item.username == username)
-    const hashedPassword = bcrypt.hashSync(password.trim(), 10)
+    const matchPassword = bcrypt.compareSync(password.trim(), userMatch.hashedPassword)
     if(!userMatch){
             res.redirect('/login?status=usernotfound')
         }
     else{
-        if(hashedPassword === userMatch.hashedPassword){
+        if(matchPassword){
             const token = jwt.sign({
                 username : userMatch.username,
-                id: userMatch.id}, '123', {
+                id: userMatch.id}, 'secret', {
                     expiresIn : 60 * 60 *24
                 })
                 res.cookie('jwt', token, { maxAge: 1000* 60 * 60 * 24})
                 
                 res.redirect('/')
-                console.log(hashedPassword)
         }else {
             res.redirect('/login?status=wrongpassword')
         }
     }
+})
+
+app.get('/play', (req,res)=>{
+    res.render('play', {
+        pageTitle: "ROCK PAPER SCISSORS",
+    })
 })
 
 app.get('/set-cookies', (req,res)=> {
