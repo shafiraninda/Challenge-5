@@ -1,0 +1,29 @@
+{
+  "name": "challenge-5",
+  "version": "1.0.0",
+  "description": "node js dan express challenge 5",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shafiraninda/Challenge-5_nodejs_express.git"
+  },
+  "author": "Ninda Shafira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shafiraninda/Challenge-5_nodejs_express/issues"
+  },
+  "homepage": "https://github.com/shafiraninda/Challenge-5_nodejs_express#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "uuidv4": "^6.2.12"
+  }
+}
