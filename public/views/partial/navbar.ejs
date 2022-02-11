@@ -20,15 +20,22 @@
            </li>
           </ul>
             <ul class="navbar-nav col-9 justify-content-end"> 
-              <li class="nav-item <%- visibility %>">
+              <li class="nav-item <%- login_visibility %> ">
+                <a class="nav-link active" href="#">Welcome, <%= user %></a>
+              </li>
+              <li class="nav-item <%- login_visibility %> ">
+                <span class="nav-link active <%- login_visibility  %>">
+                  <form action="/logout" method="post">
+                    <button class="btn btn-danger" type="submit">Logout</button>
+                  </form>
+                </span>
+              </li>
+              <li class="nav-item <%- visibility %> ">
                 <a class="nav-link active" href="/signup">SIGN UP</a>
-            </li>
-            <li class="nav-item <%- visibility %>">
+              </li>
+              <li class="nav-item <%- visibility %>">
                 <a class="nav-link active" href="/login">LOGIN</a>
-            </li>
-                <li class="nav-item">
-                  <a class="nav-link active" href="#"><%- greeting %></a> 
-                </li>
+              </li>
             </ul>
         </div>
     </div>

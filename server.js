@@ -15,8 +15,23 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 
-app.get('/', isLoggedIn, (req,res)=>{
-    
+app.get('/', (req,res)=>{
+    res.render('main', {
+        pageTitle: "Main",
+        cssStyle: null,
+        visibility:"visible",
+        login_visibility: "invisible",
+        user:null
+      })
+})
+
+app.get('/home', isLoggedIn, (req,res)=>{
+    res.render('main', {
+        pageTitle: "Main",
+        cssStyle: null,
+        visibility:"invisible",
+        login_visibility: "visible"
+      })
 })
 
 app.get('/signup', (req,res)=>{
@@ -46,9 +61,11 @@ app.post('/signup', (req,res)=>{
 })
 
 app.get('/login', (req,res)=>{
+    const { status } = req.query
     res.render('login', {
         pageTitle: "LOGIN",
-        cssStyle:"/css/signupStyle.css"
+        cssStyle:"/css/signupStyle.css",
+        status
     })
 })
 
@@ -56,11 +73,12 @@ app.post('/login', (req,res)=>{
     const { username , password }=req.body
     const data = JSON.parse(fs.readFileSync('./data/data.json','utf-8'))
     const userMatch = data.find((item)=> item.username == username)
-    const matchPassword = bcrypt.compareSync(password.trim(), userMatch.hashedPassword)
+    console.log(userMatch)
     if(!userMatch){
             res.redirect('/login?status=usernotfound')
         }
     else{
+        const matchPassword = bcrypt.compareSync(password.trim(), userMatch.hashedPassword)
         if(matchPassword){
             const token = jwt.sign({
                 username : userMatch.username,
@@ -69,14 +87,14 @@ app.post('/login', (req,res)=>{
                 })
                 res.cookie('jwt', token, { maxAge: 1000* 60 * 60 * 24})
                 
-                res.redirect('/')
+                res.redirect('/home')
         }else {
             res.redirect('/login?status=wrongpassword')
         }
     }
 })
 
-app.get('/play', (req,res)=>{
+app.get('/play', isLoggedIn, (req,res)=>{
     res.render('play', {
         pageTitle: "ROCK PAPER SCISSORS",
     })
@@ -95,10 +113,13 @@ app.get('/get-cookies', (req,res) => {
     res.json({ cookies: req.cookies})
 })
 
+app.post('/logout', (req, res) => {
+    res.cookie('jwt', '', { maxAge: 5000 })
+    res.redirect('/')
+  })
 
 
-
-const PORT = 3000
+const PORT = 5000
 app.listen(PORT, () => {
     console.log(`Server is running at port ${PORT}`)
 })
